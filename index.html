@@ -58,31 +58,87 @@
 <body>
   <h1>Fantasy Character Quiz</h1>
   <form id="quiz-form">
-    <!-- [questions unchanged, omitted here for brevity] -->
+    <div class="question">
+      <h2>1. What’s your first instinct in a tough situation?</h2>
+      <label><input type="radio" name="q1" value="a" required> Charge in swinging</label>
+      <label><input type="radio" name="q1" value="b"> Use magic or knowledge</label>
+      <label><input type="radio" name="q1" value="c"> Stay hidden and strike later</label>
+      <label><input type="radio" name="q1" value="d"> Talk your way out</label>
+    </div>
+    <div class="question">
+      <h2>2. In a group, what role do you fill?</h2>
+      <label><input type="radio" name="q2" value="a" required> Leader or frontliner</label>
+      <label><input type="radio" name="q2" value="b"> Planner or wildcard</label>
+      <label><input type="radio" name="q2" value="c"> Helper or scout</label>
+      <label><input type="radio" name="q2" value="d"> Voice of reason or charm</label>
+    </div>
+    <div class="question">
+      <h2>3. You find a mysterious item. What do you do?</h2>
+      <label><input type="radio" name="q3" value="a" required> Use it right away</label>
+      <label><input type="radio" name="q3" value="b"> Study it first</label>
+      <label><input type="radio" name="q3" value="c"> Sell it</label>
+      <label><input type="radio" name="q3" value="d"> Hide it</label>
+    </div>
+    <div class="question">
+      <h2>4. What kind of character excites you most?</h2>
+      <label><input type="radio" name="q4" value="a" required> Noble knight or defender</label>
+      <label><input type="radio" name="q4" value="b"> Scholar or magical prodigy</label>
+      <label><input type="radio" name="q4" value="c"> Mysterious rogue or wanderer</label>
+      <label><input type="radio" name="q4" value="d"> Trickster or performer</label>
+    </div>
+    <div class="question">
+      <h2>5. Choose a fantasy item:</h2>
+      <label><input type="radio" name="q5" value="a" required> Flaming sword</label>
+      <label><input type="radio" name="q5" value="b"> Arcane grimoire</label>
+      <label><input type="radio" name="q5" value="c"> Enchanted cloak</label>
+      <label><input type="radio" name="q5" value="d"> Magical instrument</label>
+    </div>
+    <div class="question">
+      <h2>6. What’s your play style?</h2>
+      <label><input type="radio" name="q6" value="a" required> Fast-paced and direct</label>
+      <label><input type="radio" name="q6" value="b"> Thoughtful and tactical</label>
+      <label><input type="radio" name="q6" value="c"> Sneaky and improvisational</label>
+      <label><input type="radio" name="q6" value="d"> Unpredictable and flashy</label>
+    </div>
+    <div class="question">
+      <h2>7. Choose a fantasy race to inspire your vibe:</h2>
+      <label><input type="radio" name="q7" value="a" required> Human</label>
+      <label><input type="radio" name="q7" value="b"> Half-Elf</label>
+      <label><input type="radio" name="q7" value="c"> Halfling</label>
+      <label><input type="radio" name="q7" value="d"> Tiefling</label>
+      <label><input type="radio" name="q7" value="e"> Dragonborn</label>
+      <label><input type="radio" name="q7" value="f"> Gnome</label>
+      <label><input type="radio" name="q7" value="g"> Dwarf</label>
+      <label><input type="radio" name="q7" value="h"> Elf</label>
+    </div>
+    <button type="submit">Reveal My Character</button>
   </form>
   <div class="result" id="result"></div>
   <div class="error" id="error"></div>
 
   <script>
-    const classProfiles = {
-      'aaaaa': { class: 'Fighter', subclass: 'Champion' },
-      'aaaab': { class: 'Paladin', subclass: 'Oath of Devotion' },
-      'aaabb': { class: 'Barbarian', subclass: 'Path of the Juggernaut' },
-      'abbbb': { class: 'Wizard', subclass: 'School of Illusion' },
-      'bbbbb': { class: 'Warlock', subclass: 'The Archfey' },
-      'bbcbb': { class: 'Sorcerer', subclass: 'Lunar Sorcery' },
-      'ccccc': { class: 'Rogue', subclass: 'Phantom' },
-      'ccccd': { class: 'Rogue', subclass: 'Swashbuckler' },
-      'ddddd': { class: 'Bard', subclass: 'College of Eloquence' },
-      'dbbcd': { class: 'Druid', subclass: 'Circle of the Stars' },
-      'bdcbd': { class: 'Ranger', subclass: 'Fey Wanderer' },
-      'cdabc': { class: 'Cleric', subclass: 'Trickery Domain' },
-      'bcdbc': { class: 'Artificer', subclass: 'Battle Smith' },
-      'badac': { class: 'Monk', subclass: 'Way of the Cobalt Soul' },
-      'cbadc': { class: 'Barbarian', subclass: 'Path of the World Tree' },
-      'dcbad': { class: 'Paladin', subclass: 'Oath of the Open Sea' },
-      'default': { class: 'Fighter', subclass: 'Champion' }
-    };
+    const classOptions = [
+  { class: 'Fighter', subclass: 'Battle Master', description: 'A tactical warrior who controls the battlefield with precision.', link: 'https://www.dndbeyond.com/classes/fighter' },
+  { class: 'Barbarian', subclass: 'Path of the World Tree', description: 'A raging force of primal power, connected to ancient roots.', link: 'https://www.dndbeyond.com/classes/barbarian' },
+  { class: 'Rogue', subclass: 'Phantom', description: 'A shadowy figure with ties to the spirits of the dead.', link: 'https://www.dndbeyond.com/classes/rogue' },
+  { class: 'Wizard', subclass: 'Bladesinging', description: 'A scholar of magic who dances through combat with sword and spell.', link: 'https://www.dndbeyond.com/classes/wizard' },
+  { class: 'Sorcerer', subclass: 'Lunar Sorcery', description: 'A magic user attuned to the mysterious cycles of the moon.', link: 'https://www.dndbeyond.com/classes/sorcerer' },
+  { class: 'Warlock', subclass: 'The Genie', description: 'A spellcaster who bargains with otherworldly patrons for power.', link: 'https://www.dndbeyond.com/classes/warlock' },
+  { class: 'Druid', subclass: 'Circle of the Stars', description: 'A cosmic guide who draws power from constellations and fates.', link: 'https://www.dndbeyond.com/classes/druid' },
+  { class: 'Bard', subclass: 'College of Eloquence', description: 'A silver-tongued orator whose words are as sharp as blades.', link: 'https://www.dndbeyond.com/classes/bard' },
+  { class: 'Paladin', subclass: 'Oath of Glory', description: 'A heroic champion who seeks honor and renown through deeds.', link: 'https://www.dndbeyond.com/classes/paladin' },
+  { class: 'Monk', subclass: 'Way of the Open Hand', description: 'A disciplined martial artist who masters the body and mind.', link: 'https://www.dndbeyond.com/classes/monk' },
+  { class: 'Cleric', subclass: 'Tempest Domain', description: 'A divine agent of storm and fury, wielding the wrath of the gods.', link: 'https://www.dndbeyond.com/classes/cleric' },
+  { class: 'Ranger', subclass: 'Fey Wanderer', description: 'A mystical scout with ties to the enchanting Feywild.', link: 'https://www.dndbeyond.com/classes/ranger' },
+  { class: 'Artificer', subclass: 'Battle Smith', description: 'A tech-savvy inventor who crafts magic and machines.', link: 'https://www.dndbeyond.com/classes/artificer' },
+  { class: 'Paladin', subclass: 'Oath of the Ancients', description: 'A protector of nature and light, with fey-like grace.', link: 'https://www.dndbeyond.com/classes/paladin' },
+  { class: 'Sorcerer', subclass: 'Wild Magic', description: 'An unpredictable force of chaos and arcane surges.', link: 'https://www.dndbeyond.com/classes/sorcerer' },
+  { class: 'Warlock', subclass: 'The Archfey', description: 'A fey-touched caster who bends reality through charm and illusion.', link: 'https://www.dndbeyond.com/classes/warlock' },
+  { class: 'Wizard', subclass: 'School of Illusion', description: 'A master of trickery, phantasms, and false realities.', link: 'https://www.dndbeyond.com/classes/wizard' },
+  { class: 'Monk', subclass: 'Way of Shadow', description: 'A silent assassin who moves through darkness.', link: 'https://www.dndbeyond.com/classes/monk' },
+  { class: 'Bard', subclass: 'College of Valor', description: 'A heroic performer who leads allies into battle.', link: 'https://www.dndbeyond.com/classes/bard' },
+  { class: 'Druid', subclass: 'Circle of the Moon', description: 'A shapeshifting guardian of nature’s primal might.', link: 'https://www.dndbeyond.com/classes/druid' }
+];
 
     const raceMap = {
       'a': 'Human', 'b': 'Half-Elf', 'c': 'Halfling', 'd': 'Tiefling',
@@ -105,14 +161,28 @@
         return;
       }
 
-      const answers = ['q1', 'q2', 'q3', 'q4', 'q5'].map(q => form.get(q));
+      const answers = requiredQuestions.map(q => form.get(q));
       const raceAnswer = form.get('q7');
-
-      const profileKey = answers.join('').toLowerCase();
-      const classResult = classProfiles[profileKey] || classProfiles['default'];
       const race = raceMap[raceAnswer] || 'Human';
 
-      const resultText = `You are a ${race} ${classResult.class} (${classResult.subclass})!`;
+      const score = { a: 0, b: 0, c: 0, d: 0 };
+      for (let i = 0; i < 5; i++) score[answers[i]]++;
+
+      const scoreString = Object.entries(score)
+        .sort((a, b) => b[1] - a[1])
+        .map(([letter]) => letter)
+        .join('');
+
+      // Convert score into an index to pick from class options
+      const hash = scoreString.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const classResult = classOptions[hash % classOptions.length];
+
+      const resultText = `
+  <strong>You are a ${race} ${classResult.class} (${classResult.subclass})!</strong><br>
+  <em>${classResult.description}</em><br>
+  <a href="${classResult.link}" target="_blank" style="color:#ffd700;text-decoration:underline;">Learn more on D&D Beyond</a>
+`;
+resultDiv.innerHTML = resultText;
       resultDiv.textContent = resultText;
     });
   </script>
