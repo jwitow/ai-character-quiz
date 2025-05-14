@@ -118,7 +118,74 @@
   <div class="error" id="error"></div>
 
   <script>
-    // script remains same as canvas content (already enhanced)
+    const classOptions = [
+  { class: 'Fighter', subclass: 'Battle Master', description: 'A tactical warrior who controls the battlefield with precision.', link: 'https://www.dndbeyond.com/classes/fighter' },
+  { class: 'Barbarian', subclass: 'Path of the World Tree', description: 'A raging force of primal power, connected to ancient roots.', link: 'https://www.dndbeyond.com/classes/barbarian' },
+  { class: 'Rogue', subclass: 'Phantom', description: 'A shadowy figure with ties to the spirits of the dead.', link: 'https://www.dndbeyond.com/classes/rogue' },
+  { class: 'Wizard', subclass: 'Bladesinging', description: 'A scholar of magic who dances through combat with sword and spell.', link: 'https://www.dndbeyond.com/classes/wizard' },
+  { class: 'Sorcerer', subclass: 'Lunar Sorcery', description: 'A magic user attuned to the mysterious cycles of the moon.', link: 'https://www.dndbeyond.com/classes/sorcerer' },
+  { class: 'Warlock', subclass: 'The Genie', description: 'A spellcaster who bargains with otherworldly patrons for power.', link: 'https://www.dndbeyond.com/classes/warlock' },
+  { class: 'Druid', subclass: 'Circle of the Stars', description: 'A cosmic guide who draws power from constellations and fates.', link: 'https://www.dndbeyond.com/classes/druid' },
+  { class: 'Bard', subclass: 'College of Eloquence', description: 'A silver-tongued orator whose words are as sharp as blades.', link: 'https://www.dndbeyond.com/classes/bard' },
+  { class: 'Paladin', subclass: 'Oath of Glory', description: 'A heroic champion who seeks honor and renown through deeds.', link: 'https://www.dndbeyond.com/classes/paladin' },
+  { class: 'Monk', subclass: 'Way of the Open Hand', description: 'A disciplined martial artist who masters the body and mind.', link: 'https://www.dndbeyond.com/classes/monk' },
+  { class: 'Cleric', subclass: 'Tempest Domain', description: 'A divine agent of storm and fury, wielding the wrath of the gods.', link: 'https://www.dndbeyond.com/classes/cleric' },
+  { class: 'Ranger', subclass: 'Fey Wanderer', description: 'A mystical scout with ties to the enchanting Feywild.', link: 'https://www.dndbeyond.com/classes/ranger' },
+  { class: 'Artificer', subclass: 'Battle Smith', description: 'A tech-savvy inventor who crafts magic and machines.', link: 'https://www.dndbeyond.com/classes/artificer' },
+  { class: 'Paladin', subclass: 'Oath of the Ancients', description: 'A protector of nature and light, with fey-like grace.', link: 'https://www.dndbeyond.com/classes/paladin' },
+  { class: 'Sorcerer', subclass: 'Wild Magic', description: 'An unpredictable force of chaos and arcane surges.', link: 'https://www.dndbeyond.com/classes/sorcerer' },
+  { class: 'Warlock', subclass: 'The Archfey', description: 'A fey-touched caster who bends reality through charm and illusion.', link: 'https://www.dndbeyond.com/classes/warlock' },
+  { class: 'Wizard', subclass: 'School of Illusion', description: 'A master of trickery, phantasms, and false realities.', link: 'https://www.dndbeyond.com/classes/wizard' },
+  { class: 'Monk', subclass: 'Way of Shadow', description: 'A silent assassin who moves through darkness.', link: 'https://www.dndbeyond.com/classes/monk' },
+  { class: 'Bard', subclass: 'College of Valor', description: 'A heroic performer who leads allies into battle.', link: 'https://www.dndbeyond.com/classes/bard' },
+  { class: 'Druid', subclass: 'Circle of the Moon', description: 'A shapeshifting guardian of nature’s primal might.', link: 'https://www.dndbeyond.com/classes/druid' }
+];
+
+    const raceMap = {
+      'a': 'Human', 'b': 'Half-Elf', 'c': 'Halfling', 'd': 'Tiefling',
+      'e': 'Dragonborn', 'f': 'Gnome', 'g': 'Dwarf', 'h': 'Elf'
+    };
+
+    document.getElementById('quiz-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      resultDiv.textContent = '';
+      errorDiv.textContent = '';
+
+      const requiredQuestions = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'];
+      const unanswered = requiredQuestions.filter(q => !form.get(q));
+
+      if (unanswered.length > 0) {
+        errorDiv.textContent = 'Please answer all questions before submitting the quiz.';
+        return;
+      }
+
+      const answers = requiredQuestions.map(q => form.get(q));
+      const raceAnswer = form.get('q7');
+      const race = raceMap[raceAnswer] || 'Human';
+
+      const score = { a: 0, b: 0, c: 0, d: 0 };
+      for (let i = 0; i < 5; i++) score[answers[i]]++;
+
+      const scoreString = Object.entries(score)
+        .sort((a, b) => b[1] - a[1])
+        .map(([letter]) => letter)
+        .join('');
+
+      // Convert score into an index to pick from class options
+      const hash = scoreString.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const classResult = classOptions[hash % classOptions.length];
+
+      const resultText = `
+  <strong>You are a ${race} ${classResult.class} (${classResult.subclass})!</strong><br>
+  <em>${classResult.description}</em><br>
+  <a href="${classResult.link}" target="_blank" style="color:#ffd700;text-decoration:underline;">Learn more on D&D Beyond</a>
+`;
+resultDiv.innerHTML = resultText;
+      resultDiv.textContent = resultText;
+    });
   </script>
 </body>
 </html>
