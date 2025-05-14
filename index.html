@@ -110,57 +110,44 @@
   <div class="result" id="result"></div>
 
   <script>
-// D&D 5e 2024 Character Quiz Generator (HTML + JS, Revised)
-// Updated to use dominant answer letter for class and race mapping
+    const classProfiles = {
+      'aaaaa': { class: 'Fighter', subclass: 'Champion' },
+      'aaaab': { class: 'Paladin', subclass: 'Oath of Devotion' },
+      'aaabb': { class: 'Barbarian', subclass: 'Path of the Juggernaut' },
+      'abbbb': { class: 'Wizard', subclass: 'School of Illusion' },
+      'bbbbb': { class: 'Warlock', subclass: 'The Archfey' },
+      'bbcbb': { class: 'Sorcerer', subclass: 'Lunar Sorcery' },
+      'ccccc': { class: 'Rogue', subclass: 'Phantom' },
+      'ccccd': { class: 'Rogue', subclass: 'Swashbuckler' },
+      'ddddd': { class: 'Bard', subclass: 'College of Eloquence' },
+      'dbbcd': { class: 'Druid', subclass: 'Circle of the Stars' },
+      'bdcbd': { class: 'Ranger', subclass: 'Fey Wanderer' },
+      'cdabc': { class: 'Cleric', subclass: 'Trickery Domain' },
+      'bcdbc': { class: 'Artificer', subclass: 'Battle Smith' },
+      'badac': { class: 'Monk', subclass: 'Way of the Cobalt Soul' },
+      'cbadc': { class: 'Barbarian', subclass: 'Path of the World Tree' },
+      'dcbad': { class: 'Paladin', subclass: 'Oath of the Open Sea' },
+      'default': { class: 'Fighter', subclass: 'Champion' }
+    };
 
-const classMap = {
-  'a': { class: 'Fighter', subclass: 'Champion' },
-  'b': { class: 'Wizard', subclass: 'School of Illusion' },
-  'c': { class: 'Rogue', subclass: 'Phantom' },
-  'd': { class: 'Bard', subclass: 'College of Eloquence' },
-  'e': { class: 'Sorcerer', subclass: 'Lunar Sorcery' },
-  'f': { class: 'Cleric', subclass: 'Trickery Domain' },
-  'g': { class: 'Druid', subclass: 'Circle of the Stars' },
-  'h': { class: 'Monk', subclass: 'Way of the Cobalt Soul' },
-};
+    const raceMap = {
+      'a': 'Human', 'b': 'Half-Elf', 'c': 'Halfling', 'd': 'Tiefling',
+      'e': 'Dragonborn', 'f': 'Gnome', 'g': 'Dwarf', 'h': 'Elf'
+    };
 
-const raceMap = {
-  'a': 'Human',
-  'b': 'Half-Elf',
-  'c': 'Halfling',
-  'd': 'Tiefling',
-  'e': 'Dragonborn',
-  'f': 'Gnome',
-  'g': 'Dwarf',
-  'h': 'Elf'
-};
+    document.getElementById('quiz-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const answers = ['q1', 'q2', 'q3', 'q4', 'q5'].map(q => form.get(q));
+      const raceAnswer = form.get('q7');
 
-function getCharacterRecommendation(answers) {
-  const counts = {};
-  for (const ans of answers) {
-    counts[ans] = (counts[ans] || 0) + 1;
-  }
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  const dominantLetter = sorted[0][0];
+      const profileKey = answers.join('').toLowerCase();
+      const classResult = classProfiles[profileKey] || classProfiles['default'];
+      const race = raceMap[raceAnswer] || 'Human';
 
-  const classResult = classMap[dominantLetter] || classMap['a'];
-  const raceResult = raceMap[dominantLetter] || raceMap['a'];
-
-  return {
-    race: raceResult,
-    class: classResult.class,
-    subclass: classResult.subclass
-  };
-}
-
-// Example usage:
-const exampleAnswers = ['b', 'c', 'b', 'd', 'c', 'a', 'd'];
-const character = getCharacterRecommendation(exampleAnswers);
-
-console.log('Recommended Character:');
-console.log(`Race: ${character.race}`);
-console.log(`Class: ${character.class}`);
-console.log(`Subclass: ${character.subclass}`);
+      const resultText = `You are a ${race} ${classResult.class} (${classResult.subclass})!`;
+      document.getElementById('result').textContent = resultText;
+    });
   </script>
 </body>
 </html>
