@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,7 +118,7 @@
 
   <script>
     const classOptions = [
-	  { class: 'Fighter', subclass: 'Battle Master', description: 'A tactical warrior who controls the battlefield with precision.', link: 'https://www.dndbeyond.com/classes/fighter' },
+  { class: 'Fighter', subclass: 'Battle Master', description: 'A tactical warrior who controls the battlefield with precision.', link: 'https://www.dndbeyond.com/classes/fighter' },
   { class: 'Barbarian', subclass: 'Path of the World Tree', description: 'A raging force of primal power, connected to ancient roots.', link: 'https://www.dndbeyond.com/classes/barbarian' },
   { class: 'Rogue', subclass: 'Phantom', description: 'A shadowy figure with ties to the spirits of the dead.', link: 'https://www.dndbeyond.com/classes/rogue' },
   { class: 'Wizard', subclass: 'Bladesinging', description: 'A scholar of magic who dances through combat with sword and spell.', link: 'https://www.dndbeyond.com/classes/wizard' },
@@ -139,51 +138,74 @@
   { class: 'Monk', subclass: 'Way of Shadow', description: 'A silent assassin who moves through darkness.', link: 'https://www.dndbeyond.com/classes/monk' },
   { class: 'Bard', subclass: 'College of Valor', description: 'A heroic performer who leads allies into battle.', link: 'https://www.dndbeyond.com/classes/bard' },
   { class: 'Druid', subclass: 'Circle of the Moon', description: 'A shapeshifting guardian of nature’s primal might.', link: 'https://www.dndbeyond.com/classes/druid' }
-  ];
+];
 
     const raceMap = {
       'a': 'Human', 'b': 'Half-Elf', 'c': 'Halfling', 'd': 'Tiefling',
       'e': 'Dragonborn', 'f': 'Gnome', 'g': 'Dwarf', 'h': 'Elf'
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const quizForm = document.getElementById('quiz-form');
-      quizForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const form = new FormData(quizForm);
-        const resultDiv = document.getElementById('result');
-        const errorDiv = document.getElementById('error');
-        resultDiv.innerHTML = '';
-        errorDiv.textContent = '';
+    document.getElementById('quiz-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      resultDiv.textContent = '';
+      errorDiv.textContent = '';
 
-        const requiredQuestions = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'];
-        const unanswered = requiredQuestions.filter(q => !form.get(q));
-        if (unanswered.length > 0) {
-          errorDiv.textContent = 'Please answer all questions before submitting the quiz.';
-          return;
+      const requiredQuestions = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'];
+      const unanswered = requiredQuestions.filter(q => !form.get(q));
+
+      if (unanswered.length > 0) {
+        errorDiv.textContent = 'Please answer all questions before submitting the quiz.';
+        return;
+      }
+
+      const answers = requiredQuestions.map(q => form.get(q));
+      const raceAnswer = form.get('q7');
+      const race = raceMap[raceAnswer] || 'Human';
+
+      const score = { a: 0, b: 0, c: 0, d: 0 };
+      for (let i = 0; i < 5; i++) score[answers[i]]++;
+
+      const scoreString = Object.entries(score)
+        .sort((a, b) => b[1] - a[1])
+        .map(([letter]) => letter)
+        .join('');
+
+      // Convert score into an index to pick from class options
+      const classScores = new Array(classOptions.length).fill(0);
+
+      // Assign scores to each class based on answer letters
+      const answerToClassAffinity = {
+        a: [0, 1, 8, 9],      // Fighter, Barbarian, Paladin (Glory), Monk (Open Hand)
+        b: [3, 4, 5, 10, 14], // Wizard, Sorcerer, Warlock, Cleric, Wild Magic
+        c: [2, 11, 12, 17],   // Rogue, Ranger, Artificer, Illusion Wizard
+        d: [6, 7, 13, 15, 16, 18, 19] // Druids, Bards, Archfey, Shadow Monk, Valor Bard
+      };
+
+      for (let i = 0; i < 6; i++) {
+        const letter = answers[i];
+        const indices = answerToClassAffinity[letter] || [];
+        for (const idx of indices) {
+          classScores[idx]++;
         }
+      }
 
-        const answers = requiredQuestions.map(q => form.get(q));
-        const raceAnswer = form.get('q7');
-        const race = raceMap[raceAnswer] || 'Human';
+      const maxScore = Math.max(...classScores);
+      const topIndices = classScores.map((score, i) => score === maxScore ? i : -1).filter(i => i !== -1);
+      const randomPick = topIndices[Math.floor(Math.random() * topIndices.length)];
+      const classResult = classOptions[randomPick];
+      const classResult = classOptions[hash % classOptions.length];
 
-        const score = { a: 0, b: 0, c: 0, d: 0 };
-        for (let i = 0; i < 5; i++) score[answers[i]]++;
+      const resultText = `
+  <strong>You are a ${race} ${classResult.class} (${classResult.subclass})!</strong><br>
+  <em>${classResult.description}</em><br>
+  <a href="${classResult.link}" target="_blank" style="color:#ffd700;text-decoration:underline;">Learn more on D&D Beyond</a>
+`;
+resultDiv.innerHTML = resultText;
+      // Remove duplicate line to avoid overwriting HTML
 
-        const scoreString = Object.entries(score)
-          .sort((a, b) => b[1] - a[1])
-          .map(([letter]) => letter)
-          .join('');
-
-        const hash = scoreString.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const classResult = classOptions[hash % classOptions.length];
-
-        resultDiv.innerHTML = `
-          <strong>You are a ${race} ${classResult.class} (${classResult.subclass})!</strong><br>
-          <em>${classResult.description}</em><br>
-          <a href="${classResult.link}" target="_blank" style="color:#ffd700;text-decoration:underline;">Learn more on D&D Beyond</a>
-        `;
-      });
     });
   </script>
 </body>
