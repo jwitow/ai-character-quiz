@@ -196,7 +196,6 @@
       const topIndices = classScores.map((score, i) => score === maxScore ? i : -1).filter(i => i !== -1);
       const randomPick = topIndices[Math.floor(Math.random() * topIndices.length)];
       const classResult = classOptions[randomPick];
-      const classResult = classOptions[hash % classOptions.length];
 
       const resultText = `
   <strong>You are a ${race} ${classResult.class} (${classResult.subclass})!</strong><br>
